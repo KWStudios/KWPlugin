@@ -1,0 +1,15 @@
+name: KWPlugin
+main: org.kwstudios.play.loader.PluginLoader
+version: 0.1Alpha
+
+commands:
+  setlobby:
+    description: Sets the Server Lobby to the current position!
+    permission: kwplugin.lobbymanager.setlobby
+    permission-message: You may not set the Lobby!
+  lobby:
+    description: Teleports the player to the lobby!
+    aliases: ['l', 'spawn']
+    permission: kwplugin.lobbymanager.lobby
+    permission-message: You may not teleport yourself to the lobby!
+    
