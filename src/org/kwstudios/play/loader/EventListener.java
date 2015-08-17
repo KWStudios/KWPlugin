@@ -77,10 +77,12 @@ public final class EventListener implements Listener {
 			if (MotdListGetter.getMotdList() != null) {
 				int number = random.nextInt(MotdListGetter.getMotdList().size() - 1);
 				String motd = MotdListGetter.getMotdList().get(number);
-				event.setMotd(ConstantHolder.MOTD_PREFIX + motd);
+				if (motd != "") {
+					event.setMotd(ConstantHolder.MOTD_PREFIX + motd);
+				}
 			}
 		} catch (Exception e) {
-			
+
 		}
 	}
 
