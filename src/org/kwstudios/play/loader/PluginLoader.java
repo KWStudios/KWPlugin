@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.kwstudios.play.commands.CommandParser;
+import org.kwstudios.play.toolbox.MotdListGetter;
 
 public class PluginLoader extends JavaPlugin{
 	
@@ -18,6 +19,8 @@ public class PluginLoader extends JavaPlugin{
 		super.onEnable();
 		
 		PluginLoader.instance = this;
+		
+		MotdListGetter.getMotdsFromFile();
 		
 		PluginDescriptionFile pluginDescriptionFile = getDescription();
 		Logger logger = Logger.getLogger("Minecraft");

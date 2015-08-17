@@ -80,9 +80,11 @@ public final class EventListener implements Listener {
 				if (motd != "") {
 					event.setMotd(ConstantHolder.MOTD_PREFIX + motd);
 				}
+			}else{
+				
 			}
 		} catch (Exception e) {
-
+			
 		}
 	}
 
