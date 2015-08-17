@@ -1,11 +1,16 @@
 package org.kwstudios.play.loader;
 
+import java.util.Random;
+
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.server.ServerListPingEvent;
 import org.kwstudios.play.toolbox.ConfigFactory;
+import org.kwstudios.play.toolbox.ConstantHolder;
+import org.kwstudios.play.toolbox.MotdListGetter;
 
 public final class EventListener implements Listener {
 
@@ -25,23 +30,24 @@ public final class EventListener implements Listener {
 		String originWorld = event.getFrom().getName();
 		isConfiguredForCommand = false;
 		boolean isPathSet = false;
-		try{
-		isPathSet = fileConfiguration.getConfigurationSection(WORLD_COMMANDS_PATH).isSet(originWorld);
-		}catch(Exception e){
+		try {
+			isPathSet = fileConfiguration.getConfigurationSection(WORLD_COMMANDS_PATH).isSet(originWorld);
+		} catch (Exception e) {
 			System.out.println("The " + originWorld + " key was not set yet in the configs! Skipping that...");
 			return;
 		}
-		
+
 		if (isPathSet) {
 			// Set<String> worldList =
 			// ConfigFactory.getKeysUnderPath(WORLD_COMMANDS_PATH, false,
 			// fileConfiguration);
 			boolean isCommandSet = false;
-			try{
-			isCommandSet = fileConfiguration.getConfigurationSection(WORLD_COMMANDS_PATH + "." + originWorld)
-					.isSet(COMMAND_STRING);
-			}catch(Exception e){
-				System.out.println("The command key inside the " + originWorld + " key was not set yet in the configs! Skipping that...");
+			try {
+				isCommandSet = fileConfiguration.getConfigurationSection(WORLD_COMMANDS_PATH + "." + originWorld)
+						.isSet(COMMAND_STRING);
+			} catch (Exception e) {
+				System.out.println("The command key inside the " + originWorld
+						+ " key was not set yet in the configs! Skipping that...");
 				return;
 			}
 			if (isCommandSet) {
@@ -62,6 +68,20 @@ public final class EventListener implements Listener {
 			event.getPlayer().performCommand(command);
 		}
 
+	}
+
+	@EventHandler
+	public void onPingEvent(ServerListPingEvent event) {
+		Random random = new Random();
+		try {
+			if (MotdListGetter.getMotdList() != null) {
+				int number = random.nextInt(MotdListGetter.getMotdList().size() - 1);
+				String motd = MotdListGetter.getMotdList().get(number);
+				event.setMotd(ConstantHolder.MOTD_PREFIX + motd);
+			}
+		} catch (Exception e) {
+			
+		}
 	}
 
 }

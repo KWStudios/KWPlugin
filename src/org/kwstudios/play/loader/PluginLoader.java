@@ -10,10 +10,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.kwstudios.play.commands.CommandParser;
 
 public class PluginLoader extends JavaPlugin{
+	
+	private static PluginLoader instance = null;
 
 	@Override
 	public void onEnable() {
 		super.onEnable();
+		
+		PluginLoader.instance = this;
+		
 		PluginDescriptionFile pluginDescriptionFile = getDescription();
 		Logger logger = Logger.getLogger("Minecraft");
 		
@@ -50,6 +55,10 @@ public class PluginLoader extends JavaPlugin{
 		saveConfig();
 		
 		return true;
+	}
+	
+	public static PluginLoader getInstance(){
+		return PluginLoader.instance;
 	}
 	
 	
