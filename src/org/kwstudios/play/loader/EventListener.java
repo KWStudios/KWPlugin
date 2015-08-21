@@ -2,6 +2,7 @@ package org.kwstudios.play.loader;
 
 import java.util.Random;
 
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -78,13 +79,13 @@ public final class EventListener implements Listener {
 				int number = random.nextInt(MotdListGetter.getMotdList().size() - 1);
 				String motd = MotdListGetter.getMotdList().get(number);
 				if (motd != "") {
-					event.setMotd(ConstantHolder.MOTD_PREFIX + motd);
+					event.setMotd(ConstantHolder.MOTD_PREFIX + ChatColor.translateAlternateColorCodes('§', motd));
 				}
-			}else{
-				
+			} else {
+
 			}
 		} catch (Exception e) {
-			
+
 		}
 	}
 
