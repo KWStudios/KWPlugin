@@ -38,7 +38,7 @@ public final class EventListener implements Listener {
 		try {
 			isPathSet = fileConfiguration.getConfigurationSection(WORLD_COMMANDS_PATH).isSet(originWorld);
 		} catch (Exception e) {
-			System.out.println("The " + originWorld + " key was not set yet in the configs! Skipping that...");
+			//System.out.println("The " + originWorld + " key was not set yet in the configs! Skipping that...");
 			return;
 		}
 
@@ -51,8 +51,8 @@ public final class EventListener implements Listener {
 				isCommandSet = fileConfiguration.getConfigurationSection(WORLD_COMMANDS_PATH + "." + originWorld)
 						.isSet(COMMAND_STRING);
 			} catch (Exception e) {
-				System.out.println("The command key inside the " + originWorld
-						+ " key was not set yet in the configs! Skipping that...");
+				//System.out.println("The command key inside the " + originWorld
+						//+ " key was not set yet in the configs! Skipping that...");
 				return;
 			}
 			if (isCommandSet) {
@@ -101,7 +101,7 @@ public final class EventListener implements Listener {
 		try {
 			isPathSet = fileConfiguration.getConfigurationSection(LOCKED_WORLDS_PATH).isSet(lockedWorld);
 		} catch (Exception e) {
-			System.out.println("The " + lockedWorld + " key was not set yet in the configs! Skipping that...");
+			//System.out.println("The " + lockedWorld + " key was not set yet in the configs! Skipping that...");
 			return;
 		}
 
@@ -116,8 +116,8 @@ public final class EventListener implements Listener {
 				isCommandSet = ConfigFactory.getBoolean(LOCKED_WORLDS_PATH + "." + lockedWorld, "inventory",
 						fileConfiguration);
 			} catch (Exception e) {
-				System.out.println("The command key inside the " + lockedWorld
-						+ " key was not set yet in the configs! Skipping that...");
+				//System.out.println("The command key inside the " + lockedWorld
+						//+ " key was not set yet in the configs! Skipping that...");
 				return;
 			}
 			if (isCommandSet) {
@@ -145,7 +145,7 @@ public final class EventListener implements Listener {
 		try {
 			isPathSet = fileConfiguration.getConfigurationSection(LOCKED_WORLDS_PATH).isSet(lockedWorld);
 		} catch (Exception e) {
-			System.out.println("The " + lockedWorld + " key was not set yet in the configs! Skipping that...");
+			//System.out.println("The " + lockedWorld + " key was not set yet in the configs! Skipping that...");
 			return;
 		}
 
@@ -160,8 +160,8 @@ public final class EventListener implements Listener {
 				isCommandSet = ConfigFactory.getBoolean(LOCKED_WORLDS_PATH + "." + lockedWorld, "items",
 						fileConfiguration);
 			} catch (Exception e) {
-				System.out.println("The command key inside the " + lockedWorld
-						+ " key was not set yet in the configs! Skipping that...");
+				//System.out.println("The command key inside the " + lockedWorld
+						//+ " key was not set yet in the configs! Skipping that...");
 				return;
 			}
 			if (isCommandSet) {
@@ -189,7 +189,7 @@ public final class EventListener implements Listener {
 		try {
 			isPathSet = fileConfiguration.getConfigurationSection(LOCKED_WORLDS_PATH).isSet(lockedWorld);
 		} catch (Exception e) {
-			System.out.println("The " + lockedWorld + " key was not set yet in the configs! Skipping that...");
+			//System.out.println("The " + lockedWorld + " key was not set yet in the configs! Skipping that...");
 			return;
 		}
 
@@ -204,8 +204,8 @@ public final class EventListener implements Listener {
 				isCommandSet = ConfigFactory.getBoolean(LOCKED_WORLDS_PATH + "." + lockedWorld, "blocks",
 						fileConfiguration);
 			} catch (Exception e) {
-				System.out.println("The command key inside the " + lockedWorld
-						+ " key was not set yet in the configs! Skipping that...");
+				//System.out.println("The command key inside the " + lockedWorld
+						//+ " key was not set yet in the configs! Skipping that...");
 				return;
 			}
 			if (isCommandSet) {
@@ -233,7 +233,7 @@ public final class EventListener implements Listener {
 		try {
 			isPathSet = fileConfiguration.getConfigurationSection(LOCKED_WORLDS_PATH).isSet(lockedWorld);
 		} catch (Exception e) {
-			System.out.println("The " + lockedWorld + " key was not set yet in the configs! Skipping that...");
+			//System.out.println("The " + lockedWorld + " key was not set yet in the configs! Skipping that...");
 			return;
 		}
 
@@ -248,8 +248,8 @@ public final class EventListener implements Listener {
 				isCommandSet = ConfigFactory.getBoolean(LOCKED_WORLDS_PATH + "." + lockedWorld, "items",
 						fileConfiguration);
 			} catch (Exception e) {
-				System.out.println("The command key inside the " + lockedWorld
-						+ " key was not set yet in the configs! Skipping that...");
+				//System.out.println("The command key inside the " + lockedWorld
+						//+ " key was not set yet in the configs! Skipping that...");
 				return;
 			}
 			if (isCommandSet) {
