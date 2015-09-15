@@ -12,4 +12,7 @@ commands:
     aliases: ['l', 'spawn']
     permission: kwplugin.lobbymanager.lobby
     permission-message: You may not teleport yourself to the lobby!
-    
+  kwlist:
+    description: Shows all the players who ever played on this server!
+    permission: kwplugin.server.list
+    permission-message: You may not use that command!

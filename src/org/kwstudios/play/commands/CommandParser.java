@@ -44,6 +44,10 @@ public class CommandParser {
 		case "spawn":
 			onLobbyCommandIssued();
 			break;
+			
+		case "kwlist":
+			new PlayerList(player);
+			break;
 
 		default:
 			isCommand = false;
