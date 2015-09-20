@@ -16,3 +16,7 @@ commands:
     description: Shows all the players who ever played on this server!
     permission: kwplugin.server.list
     permission-message: You may not use that command!
+  kwreload:
+    description: Reloads the config.yml from list!
+    permission: kwplugin.server.list
+    permission-message: You may not use that command!
