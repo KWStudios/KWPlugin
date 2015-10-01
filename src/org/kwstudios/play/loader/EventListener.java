@@ -1,9 +1,11 @@
 package org.kwstudios.play.loader;
 
+import java.util.HashMap;
 import java.util.Random;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -11,11 +13,17 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.server.ServerListPingEvent;
+import org.kwstudios.play.api.PlayerJSON;
+import org.kwstudios.play.api.RequesterThread;
 import org.kwstudios.play.toolbox.ConfigFactory;
 import org.kwstudios.play.toolbox.ConstantHolder;
 import org.kwstudios.play.toolbox.MotdListGetter;
+
+import com.google.gson.Gson;
 
 public final class EventListener implements Listener {
 
@@ -88,7 +96,7 @@ public final class EventListener implements Listener {
 				int number = random.nextInt(MotdListGetter.getMotdList().size() - 1);
 				String motd = MotdListGetter.getMotdList().get(number);
 				if (motd != "") {
-					event.setMotd(ConstantHolder.MOTD_PREFIX + ChatColor.translateAlternateColorCodes('§', motd));
+					event.setMotd(ConstantHolder.MOTD_PREFIX + ChatColor.translateAlternateColorCodes('ï¿½', motd));
 				}
 			} else {
 
@@ -288,6 +296,39 @@ public final class EventListener implements Listener {
 				event.setCancelled(true);
 			}
 		}
+	}
+
+	// ******* API events, store data on player join and leave *******
+	@EventHandler
+	public void onPlayerJoin(PlayerJoinEvent event) {
+		Player player = event.getPlayer();
+		PlayerJSON playerJSON = new PlayerJSON(player.getName(), player.getUniqueId().toString(),
+				player.getFirstPlayed(), player.getLastPlayed(), player.isOnline(), player.isBanned());
+		Gson gson = new Gson();
+		String jsonParam = gson.toJson(playerJSON);
+		String url = ConstantHolder.API_URL.replace(":server", "play.kwstudios.org").replace(":player",
+				player.getName());
+		HashMap<String, String> parameters = new HashMap<String, String>();
+		parameters.put("data", jsonParam);
+
+		Thread thread = new Thread(new RequesterThread(url, PluginLoader.getHeaders(), parameters));
+		thread.start();
+	}
+
+	@EventHandler
+	public void onPlayerLeave(PlayerQuitEvent event) {
+		Player player = event.getPlayer();
+		PlayerJSON playerJSON = new PlayerJSON(player.getName(), player.getUniqueId().toString(),
+				player.getFirstPlayed(), player.getLastPlayed(), false, player.isBanned());
+		Gson gson = new Gson();
+		String jsonParam = gson.toJson(playerJSON);
+		String url = ConstantHolder.API_URL.replace(":server", "play.kwstudios.org").replace(":player",
+				player.getName());
+		HashMap<String, String> parameters = new HashMap<String, String>();
+		parameters.put("data", jsonParam);
+
+		Thread thread = new Thread(new RequesterThread(url, PluginLoader.getHeaders(), parameters));
+		thread.start();
 	}
 
 }
