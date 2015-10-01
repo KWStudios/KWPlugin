@@ -5,6 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.kwstudios.play.api.ApiInitializer;
 import org.kwstudios.play.loader.PluginLoader;
 
 public class CommandParser {
@@ -54,6 +55,11 @@ public class CommandParser {
 
 		case "kwreload":
 			PluginLoader.getInstance().reloadConfig();
+			PluginLoader.getInstance().setupApiHashMaps();
+			break;
+			
+		case "kwinit":
+			new ApiInitializer();
 			break;
 
 		default:

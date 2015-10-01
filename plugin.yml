@@ -20,3 +20,7 @@ commands:
     description: Reloads the config.yml from list!
     permission: kwplugin.server.list
     permission-message: You may not use that command!
+  kwinit:
+    description: Inits the API for all the Players!
+    permission: kwplugin.api.init
+    permission-message: You may not use that command!
