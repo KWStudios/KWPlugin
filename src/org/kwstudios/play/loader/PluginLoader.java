@@ -71,7 +71,7 @@ public class PluginLoader extends JavaPlugin {
 	public void setupApiHashMaps() {
 		if (getConfig().isSet("settings.authorization")) {
 			String authorization = ConfigFactory.getString("settings", "authorization", getConfig());
-			headers.put("HTTP_AUTHORIZATION_CODE", authorization);
+			headers.put("Authorization-Code", authorization);
 		}
 	}
 
