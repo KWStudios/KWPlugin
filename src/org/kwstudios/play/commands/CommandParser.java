@@ -57,9 +57,10 @@ public class CommandParser {
 			PluginLoader.getInstance().reloadConfig();
 			PluginLoader.getInstance().setupApiHashMaps();
 			break;
-			
+
 		case "kwinit":
-			new ApiInitializer();
+			Thread thread = new Thread(new Initializer());
+			thread.start();
 			break;
 
 		default:
@@ -82,6 +83,15 @@ public class CommandParser {
 
 	public boolean isCommand() {
 		return isCommand;
+	}
+
+	private class Initializer implements Runnable {
+
+		@Override
+		public void run() {
+			new ApiInitializer();
+		}
+
 	}
 
 }
