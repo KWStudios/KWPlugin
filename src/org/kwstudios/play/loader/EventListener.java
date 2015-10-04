@@ -88,25 +88,54 @@ public final class EventListener implements Listener {
 				event.getPlayer().removeMetadata("lobbyCommandTriggered", PluginLoader.getInstance());
 			}
 		}
-		
-		// Our fix for the Lobby MultiVerse-Inventories problem
-		Set<String> allConfiguredWorlds = ConfigFactory.getKeysUnderPath("settings.commandsOnWorldChange", false,
-				PluginLoader.getInstance().getConfig());
-		for (String world : allConfiguredWorlds) {
-			if (event.getPlayer().getWorld().getName().equalsIgnoreCase(world.trim())) {
-				List<String> allConsoleCommands = PluginLoader.getInstance().getConfig()
-						.getStringList("settings.commandsOnWorldChange." + world.trim() + "." + "console");
-				for (String command : allConsoleCommands) {
-					Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
-							command.replace("$PLAYER$", event.getPlayer().getName()).replace("$WORLD$",
-									event.getPlayer().getWorld().getName()));
-				}
 
-				List<String> allPlayerCommands = PluginLoader.getInstance().getConfig()
-						.getStringList("settings.commandsOnWorldChange." + world.trim() + "." + "player");
-				for (String command : allPlayerCommands) {
-					event.getPlayer().performCommand(command.replace("$PLAYER$", event.getPlayer().getName())
-							.replace("$WORLD$", event.getPlayer().getWorld().getName()));
+		// Our fix for the Lobby MultiVerse-Inventories problem
+		if (ConfigFactory.getKeysUnderPath("settings.commandsOnWorldChange", false,
+				PluginLoader.getInstance().getConfig()) != null) {
+			Set<String> allConfiguredWorlds = ConfigFactory.getKeysUnderPath("settings.commandsOnWorldChange", false,
+					PluginLoader.getInstance().getConfig());
+			for (String world : allConfiguredWorlds) {
+				if (event.getPlayer().getWorld().getName().equalsIgnoreCase(world.trim())) {
+					List<String> allConsoleCommands = PluginLoader.getInstance().getConfig()
+							.getStringList("settings.commandsOnWorldChange." + world.trim() + "." + "console");
+					for (String command : allConsoleCommands) {
+						final String finalCommand = command;
+						final PlayerChangedWorldEvent finalEvent = event;
+
+						Bukkit.getServer().getScheduler().runTaskLaterAsynchronously(PluginLoader.getInstance(),
+								new Runnable() {
+
+									@Override
+									public void run() {
+
+										Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
+												finalCommand.replace("$PLAYER$", finalEvent.getPlayer().getName())
+														.replace("$WORLD$",
+																finalEvent.getPlayer().getWorld().getName()));
+
+									}
+								}, 80);
+					}
+
+					List<String> allPlayerCommands = PluginLoader.getInstance().getConfig()
+							.getStringList("settings.commandsOnWorldChange." + world.trim() + "." + "player");
+					for (String command : allPlayerCommands) {
+						final String finalCommand = command;
+						final PlayerChangedWorldEvent finalEvent = event;
+
+						Bukkit.getServer().getScheduler().runTaskLaterAsynchronously(PluginLoader.getInstance(),
+								new Runnable() {
+
+									@Override
+									public void run() {
+
+										finalEvent.getPlayer().performCommand(finalCommand
+												.replace("$PLAYER$", finalEvent.getPlayer().getName())
+												.replace("$WORLD$", finalEvent.getPlayer().getWorld().getName()));
+
+									}
+								}, 80);
+					}
 				}
 			}
 		}
