@@ -134,7 +134,7 @@ public final class EventListener implements Listener {
 												.replace("$WORLD$", finalEvent.getPlayer().getWorld().getName()));
 
 									}
-								}, 80);
+								}, 100);
 					}
 				}
 			}
