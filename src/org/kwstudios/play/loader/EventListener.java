@@ -1,8 +1,11 @@
 package org.kwstudios.play.loader;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -16,6 +19,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.server.ServerListPingEvent;
 import org.kwstudios.play.api.PlayerJSON;
 import org.kwstudios.play.api.RequesterThread;
@@ -329,6 +333,32 @@ public final class EventListener implements Listener {
 
 		Thread thread = new Thread(new RequesterThread(url, PluginLoader.getHeaders(), parameters));
 		thread.start();
+	}
+
+	// This is a fix for the lobby because MultiVerse inventories is not
+	// always resetting the inventory properly
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onTeleport(PlayerTeleportEvent event) {
+		Set<String> allConfiguredWorlds = ConfigFactory.getKeysUnderPath("settings.commandsOnWorldChange", false,
+				PluginLoader.getInstance().getConfig());
+		for (String world : allConfiguredWorlds) {
+			if (event.getTo().getWorld().getName().equalsIgnoreCase(world.trim())) {
+				List<String> allConsoleCommands = PluginLoader.getInstance().getConfig()
+						.getStringList("settings.commandsOnWorldChange." + world.trim() + "." + "console");
+				for (String command : allConsoleCommands) {
+					Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
+							command.replace("$PLAYER$", event.getPlayer().getName()).replace("$WORLD$",
+									event.getTo().getWorld().getName()));
+				}
+
+				List<String> allPlayerCommands = PluginLoader.getInstance().getConfig()
+						.getStringList("settings.commandsOnWorldChange." + world.trim() + "." + "player");
+				for (String command : allPlayerCommands) {
+					event.getPlayer().performCommand(command.replace("$PLAYER$", event.getPlayer().getName())
+							.replace("$WORLD$", event.getTo().getWorld().getName()));
+				}
+			}
+		}
 	}
 
 }
