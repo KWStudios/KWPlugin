@@ -9,7 +9,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -95,8 +94,8 @@ public final class EventListener implements Listener {
 		// Our fix for the Lobby MultiVerse-Inventories problem
 		if (ConfigFactory.getKeysUnderPath("settings.lobbyCommandsOnWorldChange", false,
 				PluginLoader.getInstance().getConfig()) != null) {
-			Set<String> allConfiguredWorlds = ConfigFactory.getKeysUnderPath("settings.lobbyCommandsOnWorldChange", false,
-					PluginLoader.getInstance().getConfig());
+			Set<String> allConfiguredWorlds = ConfigFactory.getKeysUnderPath("settings.lobbyCommandsOnWorldChange",
+					false, PluginLoader.getInstance().getConfig());
 			for (String world : allConfiguredWorlds) {
 				if (event.getPlayer().getWorld().getName().equalsIgnoreCase(world.trim())) {
 
@@ -105,7 +104,7 @@ public final class EventListener implements Listener {
 					final List<String> allPlayerCommands = PluginLoader.getInstance().getConfig()
 							.getStringList("settings.lobbyCommandsOnWorldChange." + world.trim() + "." + "player");
 					final PlayerChangedWorldEvent finalEvent = event;
-					
+
 					Bukkit.getServer().getScheduler().runTaskLaterAsynchronously(PluginLoader.getInstance(),
 							new Runnable() {
 
@@ -372,17 +371,15 @@ public final class EventListener implements Listener {
 		Thread thread = new Thread(new RequesterThread(url, PluginLoader.getHeaders(), parameters));
 		thread.start();
 	}
-	
+
 	@EventHandler
-	public void onChat(AsyncPlayerChatEvent event){
+	public void onChat(AsyncPlayerChatEvent event) {
 		Player player = event.getPlayer();
 		Set<Player> recipient = event.getRecipients();
 		World pWorld = player.getWorld();
-		Player[] a = null;
-		recipient.toArray(a);
-		for (int i = 0; i < recipient.size(); i++){
-			if (pWorld != a[i].getWorld()){
-				recipient.remove(a[i]);
+		for (Player loopPlayer : recipient) {
+			if (pWorld != loopPlayer.getWorld()) {
+				recipient.remove(loopPlayer);
 			}
 		}
 	}
