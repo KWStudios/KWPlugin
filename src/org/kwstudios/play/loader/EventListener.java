@@ -97,34 +97,33 @@ public final class EventListener implements Listener {
 			Set<String> allConfiguredWorlds = ConfigFactory.getKeysUnderPath("settings.lobbyCommandsOnWorldChange",
 					false, PluginLoader.getInstance().getConfig());
 			for (String world : allConfiguredWorlds) {
-				if (event.getPlayer().getWorld().getName().equalsIgnoreCase(world.trim())) {
-
 					final List<String> allConsoleCommands = PluginLoader.getInstance().getConfig()
 							.getStringList("settings.lobbyCommandsOnWorldChange." + world.trim() + "." + "console");
 					final List<String> allPlayerCommands = PluginLoader.getInstance().getConfig()
 							.getStringList("settings.lobbyCommandsOnWorldChange." + world.trim() + "." + "player");
 					final PlayerChangedWorldEvent finalEvent = event;
+					final String finalWorld = world;
 
 					Bukkit.getServer().getScheduler().runTaskLaterAsynchronously(PluginLoader.getInstance(),
 							new Runnable() {
 
 								@Override
 								public void run() {
-									for (String command : allConsoleCommands) {
-										Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
-												command.replace("$PLAYER$", finalEvent.getPlayer().getName()).replace(
-														"$WORLD$", finalEvent.getPlayer().getWorld().getName()));
+									if (finalEvent.getPlayer().getWorld().getName().equalsIgnoreCase(finalWorld.trim())) {
+										for (String command : allConsoleCommands) {
+											Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
+													command.replace("$PLAYER$", finalEvent.getPlayer().getName()).replace(
+															"$WORLD$", finalEvent.getPlayer().getWorld().getName()));
+										}
+	
+										for (String command : allPlayerCommands) {
+											finalEvent.getPlayer().performCommand(
+													command.replace("$PLAYER$", finalEvent.getPlayer().getName()).replace(
+															"$WORLD$", finalEvent.getPlayer().getWorld().getName()));
+										}
 									}
-
-									for (String command : allPlayerCommands) {
-										finalEvent.getPlayer().performCommand(
-												command.replace("$PLAYER$", finalEvent.getPlayer().getName()).replace(
-														"$WORLD$", finalEvent.getPlayer().getWorld().getName()));
-									}
-
 								}
 							}, 80);
-				}
 			}
 		}
 	}
@@ -137,7 +136,7 @@ public final class EventListener implements Listener {
 				int number = random.nextInt(MotdListGetter.getMotdList().size() - 1);
 				String motd = MotdListGetter.getMotdList().get(number);
 				if (motd != "") {
-					event.setMotd(ConstantHolder.MOTD_PREFIX + ChatColor.translateAlternateColorCodes('§', motd));
+					event.setMotd(ConstantHolder.MOTD_PREFIX + ChatColor.translateAlternateColorCodes('Â§', motd));
 				}
 			} else {
 
@@ -377,11 +376,33 @@ public final class EventListener implements Listener {
 		Player player = event.getPlayer();
 		Set<Player> recipient = event.getRecipients();
 		World pWorld = player.getWorld();
-		for (Player loopPlayer : recipient) {
-			if (pWorld != loopPlayer.getWorld()) {
-				recipient.remove(loopPlayer);
+		int i = 0;
+		int imax = recipient.size();
+		while(i < imax) {
+			boolean onlyInWorldChat = true;
+			List<String> okWorlds = null;
+			if(ConfigFactory.getKeysUnderPath("settings.chat.worlds", false, PluginLoader.getInstance().getConfig()).contains(player.getWorld().getName())) {
+				onlyInWorldChat = false;
+				okWorlds = PluginLoader.getInstance().getConfig().getStringList("settings.chat.worlds." + player.getWorld().getName());
 			}
+			
+			Player[] recipients = recipient.toArray(new Player[1]);
+			
+			if(onlyInWorldChat) {
+				if(!recipients[i].getWorld().equals(player.getWorld())){
+					recipient.remove(recipients[i]);
+				}
+			}
+			else if(!okWorlds.contains(recipients[i].getWorld().getName())) {
+				recipient.remove(recipients[i]);
+			}
+			i++;
 		}
+		//for (Player loopPlayer : recipient) {
+		//	if (pWorld != loopPlayer.getWorld()) {
+		//		recipient.remove(loopPlayer);
+		//	}
+		//}
 	}
 
 }
