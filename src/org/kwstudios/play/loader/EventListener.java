@@ -375,17 +375,16 @@ public final class EventListener implements Listener {
 		Player player = event.getPlayer();
 		Set<Player> recipient = event.getRecipients();
 		//World pWorld = player.getWorld();
+		boolean onlyInWorldChat = true;
+		List<String> okWorlds = null;
+		if(ConfigFactory.getKeysUnderPath("settings.chat.worlds", false, PluginLoader.getInstance().getConfig()).contains(player.getWorld().getName())) {
+			onlyInWorldChat = false;
+			okWorlds = PluginLoader.getInstance().getConfig().getStringList("settings.chat.worlds." + player.getWorld().getName());
+		}
 		int i = 0;
-		while(i < recipient.size()) {
-			boolean onlyInWorldChat = true;
-			List<String> okWorlds = null;
-			if(ConfigFactory.getKeysUnderPath("settings.chat.worlds", false, PluginLoader.getInstance().getConfig()).contains(player.getWorld().getName())) {
-				onlyInWorldChat = false;
-				okWorlds = PluginLoader.getInstance().getConfig().getStringList("settings.chat.worlds." + player.getWorld().getName());
-			}
-			
-			Player[] recipients = recipient.toArray(new Player[1]);
-			
+		Player[] recipients = recipient.toArray(new Player[1]);
+		
+		while(i < recipient.size()) {					
 			if(onlyInWorldChat) {
 				if(!recipients[i].getWorld().equals(player.getWorld())){
 					recipient.remove(recipients[i]);
