@@ -136,7 +136,7 @@ public final class EventListener implements Listener {
 				int number = random.nextInt(MotdListGetter.getMotdList().size() - 1);
 				String motd = MotdListGetter.getMotdList().get(number);
 				if (motd != "") {
-					event.setMotd(ConstantHolder.MOTD_PREFIX + ChatColor.translateAlternateColorCodes('Â§', motd));
+					event.setMotd(ConstantHolder.MOTD_PREFIX + ChatColor.translateAlternateColorCodes('§', motd));
 				}
 			} else {
 
