@@ -7,7 +7,6 @@ import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -375,10 +374,9 @@ public final class EventListener implements Listener {
 	public void onChat(AsyncPlayerChatEvent event) {
 		Player player = event.getPlayer();
 		Set<Player> recipient = event.getRecipients();
-		World pWorld = player.getWorld();
+		//World pWorld = player.getWorld();
 		int i = 0;
-		int imax = recipient.size();
-		while(i < imax) {
+		while(i < recipient.size()) {
 			boolean onlyInWorldChat = true;
 			List<String> okWorlds = null;
 			if(ConfigFactory.getKeysUnderPath("settings.chat.worlds", false, PluginLoader.getInstance().getConfig()).contains(player.getWorld().getName())) {
@@ -393,7 +391,7 @@ public final class EventListener implements Listener {
 					recipient.remove(recipients[i]);
 				}
 			}
-			else if(!okWorlds.contains(recipients[i].getWorld().getName())) {
+			else if(!(okWorlds.contains(recipients[i].getWorld().getName()) || recipients[i].getWorld().equals(player.getWorld()))) {
 				recipient.remove(recipients[i]);
 			}
 			i++;
