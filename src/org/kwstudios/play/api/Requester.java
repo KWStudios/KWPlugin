@@ -6,12 +6,13 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class Requester {
 
@@ -40,7 +41,7 @@ public class Requester {
 
 	private void sendPost() throws Exception {
 		URL obj = new URL(url);
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+		HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
 
 		// add reuqest header
 		con.setRequestMethod("POST");
@@ -65,7 +66,7 @@ public class Requester {
 		// System.out.println("Post parameters : " + urlParameters);
 		// System.out.println("Response Code : " + responseCode);
 
-		if (responseCode == HttpURLConnection.HTTP_OK) {
+		if (responseCode == HttpsURLConnection.HTTP_OK) {
 			reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
 		} else {
 			System.out.println("Something unexpected went wrong on the given Server! Response code: " + responseCode);
